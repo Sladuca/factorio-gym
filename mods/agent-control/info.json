@@ -1,0 +1,9 @@
+{
+  "name": "agent-control",
+  "version": "0.1.0",
+  "title": "Agent Control System",
+  "author": "factorio-mcp",
+  "description": "Enables external agents to control players via RCON commands",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0.0"]
+}

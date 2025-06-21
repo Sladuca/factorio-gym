@@ -1,65 +1,73 @@
-# Implementation Roadmap
+# Implementation Roadmap - Simplified Architecture
 
-## Phase 1: Minimal Viable Agent (MVP)
-**Goal**: Get basic player movement working
-
-### Deliverables
-1. **Simple Factorio Mod**
-   - Read movement commands from file
-   - Control player `walking_state`
-   - Report player position
-
-2. **Basic Agent**
-   - Send movement commands
-   - Read player state
-   - Simple "move to position" task
-
-3. **File-based Communication**
-   - JSON command/state files
-   - Basic error handling
-
-### Success Criteria
-- Agent can command player to walk to specific coordinates
-- Player reaches target within reasonable time
-- State is accurately reported back
-
-## Phase 2: Basic Actions
-**Goal**: Add mining and inventory management
+## Phase 1: Direct RCON Control (MVP)
+**Goal**: Get basic player movement working via direct RCON
 
 ### Deliverables
-1. **Extended Mod Features**
-   - Mining commands (`mine_entity`)
-   - Inventory scanning and reporting
-   - Item pickup/drop
+1. **Minimal Factorio Mod (Optional)**
+   - Helper functions for common commands
+   - JSON response formatting utilities
+   - Error handling wrappers
 
-2. **Agent Improvements**
-   - "Mine resource patch" task
-   - Inventory awareness
-   - Basic pathfinding around obstacles
+2. **Direct RCON Agent**
+   - Python RCON client with connection pooling
+   - Send Lua commands directly to Factorio
+   - Receive JSON responses via `game.table_to_json()`
+   - Smart state caching to minimize queries
+
+3. **Core Commands**
+   - `set_walking_state()` for movement
+   - `get_player_state()` for position/status
+   - `teleport()` for testing/training
 
 ### Success Criteria
-- Agent can command player to mine specific resources
-- Inventory state is tracked and reported
-- Player can clear a small area of trees/rocks
+- Agent can control player movement via RCON
+- 5-20ms command latency (localhost)
+- No file I/O dependencies
+- Achieve 60 commands/second sustained
+
+## Phase 2: Actions & State Management
+**Goal**: Add mining, inventory, and efficient state queries
+
+### Deliverables
+1. **Extended Command Set**
+   - `start_mining(x, y)` for resource extraction
+   - `get_inventory()` and `transfer_items()` for item management
+   - `find_entities(area, filters)` for world scanning
+
+2. **Smart State Management**
+   - Agent-side caching of entity data
+   - Selective state queries (position vs full state)
+   - Event-driven updates (inventory after mining)
+
+3. **Compound Tasks**
+   - "Mine resource patch" with pathfinding
+   - Inventory-aware behavior (stop when full)
+   - Basic obstacle detection
+
+### Success Criteria
+- Agent can mine resources autonomously
+- State queries are efficient (<2KB typical)
+- Agent maintains situational awareness without constant polling
 
 ## Phase 3: Construction & Crafting
 **Goal**: Build and craft items
 
 ### Deliverables
-1. **Construction System**
-   - Place entities from inventory
-   - Handle building requirements
-   - Power pole/belt placement
+1. **Construction System (with API workarounds)**
+   - Use `surface.create_entity` + manual inventory deduction
+   - Handle building placement validation
+   - Implement realistic item consumption
 
 2. **Crafting System**
-   - Queue crafting recipes
-   - Monitor crafting progress
-   - Auto-craft missing components
+   - Queue crafting recipes via RCON
+   - Monitor crafting progress via script-output
+   - Auto-craft missing components logic
 
 ### Success Criteria
-- Agent can build simple structures (power poles, belts)
-- Agent can craft items when needed
-- Agent can set up a basic mining outpost
+- Agent can place buildings with inventory management
+- Crafting integration works end-to-end
+- Can build mining outpost with 5-10 SPS performance
 
 ## Phase 4: Task Planning
 **Goal**: High-level task decomposition
@@ -128,10 +136,11 @@
 
 ## Risk Mitigation
 
-### Technical Risks
-- **Factorio API limitations**: Start with simple actions, expand gradually
-- **Performance issues**: Profile early, optimize file I/O
-- **Mod crashes**: Extensive error handling and logging
+### Technical Risks (Updated)
+- **RCON latency**: 5-20ms per command, requires smart caching
+- **API limitations**: Building API removed, need workarounds
+- **State query costs**: Large entity scans could slow performance
+- **Connection limits**: 5 RCON connections max per server
 
 ### Design Risks
 - **Over-engineering**: Start simple, add complexity incrementally
