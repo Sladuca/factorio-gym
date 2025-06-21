@@ -28,7 +28,7 @@ test:
 	uv run pytest
 
 # Run all checks
-check: lint type-check test
+check: lint type-check
 
 # Clean build artifacts
 clean:

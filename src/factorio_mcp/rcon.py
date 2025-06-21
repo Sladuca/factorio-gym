@@ -2,18 +2,18 @@
 
 import socket
 import struct
-from typing import Optional
+from typing import Any, Optional, Tuple
 
 
 class FactorioRCON:
     """RCON client for communicating with Factorio servers."""
 
     def __init__(self, host: str, port: int, password: str) -> None:
-        self.host = host
-        self.port = port
+        self.host: str = host
+        self.port: int = port
         self.password = password
         self.socket: Optional[socket.socket] = None
-        self.request_id = 1
+        self.request_id: int = 1
 
     def connect(self) -> None:
         """Connect to the server and authenticate."""
@@ -57,7 +57,7 @@ class FactorioRCON:
         self.socket.send(packet)
         self.request_id += 1
 
-    def _receive_packet(self) -> tuple[int, int, int, str]:
+    def _receive_packet(self) -> Tuple[int, int, int, str]:
         """Receive an RCON packet."""
         if not self.socket:
             raise RuntimeError("Not connected to server")
@@ -78,6 +78,6 @@ class FactorioRCON:
         self.connect()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """Context manager exit."""
         self.close()
