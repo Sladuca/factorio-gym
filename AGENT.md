@@ -18,6 +18,8 @@ Guidelines for AI agents (Claude, Amp, etc.) working on this project:
 - Use comprehensive testing and verification at each development stage
 - **NEVER claim something is "done" until you've actually tested it works**
 - Test all scripts, commands, and functionality before marking tasks complete
+- **When encountering or fixing bugs, add regression tests to prevent recurrence**
+- **Clean up temporary files** - Remove debugging scripts, test files, and temporary code before completion
 
 ### Collaborative Review Process
 - When writing/updating specs, spawn a "sub-agent" to act as a "socratic counterpart"

@@ -1,0 +1,51 @@
+   0.001 2025-06-21 19:07:46; Factorio 2.0.55 (build 83138, mac-arm64, steam, space-age)
+   0.005 Operating system: macOS 15.5.0
+   0.006 Program arguments: "/Users/seb/Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents/MacOS/factorio" "--start-server" "saves/test.zip" "--port" "34197" "--rcon-port" "34198" "--rcon-password" <private> "--server-settings" "config/server-settings.json" "--mod-directory" "mods" 
+   0.006 Config path: /Users/seb/Library/Application Support/factorio/config/config.ini
+   0.006 Read data path: /Users/seb/Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents/data
+   0.006 Write data path: /Users/seb/Library/Application Support/factorio [463242/948584MB]
+   0.006 Binaries path: /Users/seb/Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents
+   0.212 System info: [CPU: arm64, 12 cores, RAM: 18432 MB]
+   0.216 Running in headless mode
+   0.216 Audio is disabled
+   0.218 Info ModManager.cpp:444: FeatureFlag expansion-shaders = true
+   0.221 Info ModManager.cpp:444: FeatureFlag freezing = true
+   0.221 Info ModManager.cpp:444: FeatureFlag quality = true
+   0.222 Info ModManager.cpp:444: FeatureFlag rail-bridges = true
+   0.222 Info ModManager.cpp:444: FeatureFlag segmented-units = true
+   0.222 Info ModManager.cpp:444: FeatureFlag space-travel = true
+   0.222 Info ModManager.cpp:444: FeatureFlag spoiling = true
+   0.232 Loading mod core 0.0.0 (data.lua)
+   0.304 Loading mod base 2.0.55 (data.lua)
+   0.814 Loading mod agent-control 0.1.0 (data.lua)
+   0.830 Loading mod elevated-rails 2.0.55 (data.lua)
+   0.955 Loading mod quality 2.0.55 (data.lua)
+   0.990 Loading mod space-age 2.0.55 (data.lua)
+   1.900 Loading mod base 2.0.55 (data-updates.lua)
+   1.943 Loading mod quality 2.0.55 (data-updates.lua)
+   2.011 Loading mod space-age 2.0.55 (data-updates.lua)
+   2.467 Checksum for core: 1599024484
+   2.467 Checksum of base: 2095342242
+   2.467 Checksum of agent-control: 2338693539
+   2.467 Checksum of elevated-rails: 755107374
+   2.468 Checksum of quality: 3594706471
+   2.468 Checksum of space-age: 2561352795
+   3.962 Prototype list checksum: 611276394
+   4.100 Info PlayerData.cpp:66: Local player-data.json unavailable
+   4.100 Info PlayerData.cpp:71: Cloud player-data.json unavailable
+   4.104 Factorio initialised
+   4.106 Info ServerSynchronizer.cpp:22: nextHeartbeatSequenceNumber(0) initialized Synchronizer nextTickClosureTick(0).
+   4.106 Info ServerMultiplayerManager.cpp:808: updateTick(18446744073709551615) changing state from(Ready) to(PreparedToHostGame)
+   4.106 Info ServerMultiplayerManager.cpp:808: updateTick(18446744073709551615) changing state from(PreparedToHostGame) to(CreatingGame)
+   4.107 Loading map /Users/seb/factorio-mcp/saves/test.zip: 825096 bytes.
+   4.193 Loading level.dat: 971357 bytes.
+   4.203 Info Scenario.cpp:153: Map version 2.0.55-0
+   4.278 Blueprint storage "blueprint-storage-2.dat" was not found, trying to load previous version storage "blueprint-storage.dat"
+   4.278 Loading script.dat: 1253 bytes.
+   4.322 Checksum for script __level__/control.lua: 2734153661
+   4.352 Checksum for script __agent-control__/control.lua: 1254744751
+   4.395 Info UDPSocket.cpp:37: Opening socket at (IP ADDR:({0.0.0.0:34197}))
+   4.402 Hosting game at IP ADDR:({0.0.0.0:34197})
+   4.403 Info ServerMultiplayerManager.cpp:808: updateTick(19534) changing state from(CreatingGame) to(InGame)
+   4.403 Info UDPSocket.cpp:49: Opening socket for broadcast
+   4.448 Info RemoteCommandProcessor.cpp:126: Starting RCON interface at IP ADDR:({0.0.0.0:34198})

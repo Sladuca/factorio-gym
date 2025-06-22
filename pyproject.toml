@@ -12,6 +12,7 @@ dependencies = [
     "pydantic>=2.0.0",
     "typer>=0.9.0",
     "rich>=13.0.0",
+    "keyboard>=0.13.5",
 ]
 
 [project.optional-dependencies]
@@ -66,3 +67,6 @@ python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
 addopts = "-v --tb=short"
+markers = [
+    "integration: marks tests as integration tests (may require external dependencies)",
+]

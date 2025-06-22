@@ -1,0 +1,14 @@
+{
+  "include": [
+    "src",
+    "scripts",
+    "tests"
+  ],
+  "extraPaths": [
+    "src",
+    "scripts"
+  ],
+  "pythonPath": ".venv/bin/python3",
+  "venvPath": ".",
+  "venv": ".venv"
+}

@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  factorio-server-1:
+    build: .
+    container_name: factorio-server-1
+    ports:
+      - "34197:34197/udp"  # Game port
+      - "27015:27015/tcp"  # RCON port
+    volumes:
+      - ./data/server1:/factorio
+      - ./mods:/factorio/mods:ro
+      - ./config/server1:/factorio/config
+    environment:
+      - PORT=34197
+      - RCON_PORT=27015
+      - SAVE_NAME=server1_autosave
+      - GENERATE_NEW_SAVE=true
+      - LOAD_LATEST_SAVE=true
+    restart: unless-stopped
+    networks:
+      - factorio-network
+    healthcheck:
+      test: ["CMD", "nc", "-u", "-z", "localhost", "34197"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  factorio-server-2:
+    build: .
+    container_name: factorio-server-2
+    ports:
+      - "34198:34197/udp"  # Game port (mapped to different host port)
+      - "27016:27015/tcp"  # RCON port (mapped to different host port)
+    volumes:
+      - ./data/server2:/factorio
+      - ./mods:/factorio/mods:ro
+      - ./config/server2:/factorio/config
+    environment:
+      - PORT=34197  # Internal port stays the same
+      - RCON_PORT=27015  # Internal port stays the same
+      - SAVE_NAME=server2_autosave
+      - GENERATE_NEW_SAVE=true
+      - LOAD_LATEST_SAVE=true
+    restart: unless-stopped
+    networks:
+      - factorio-network
+    healthcheck:
+      test: ["CMD", "nc", "-u", "-z", "localhost", "34197"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  factorio-server-3:
+    build: .
+    container_name: factorio-server-3
+    ports:
+      - "34199:34197/udp"  # Game port (mapped to different host port)
+      - "27017:27015/tcp"  # RCON port (mapped to different host port)
+    volumes:
+      - ./data/server3:/factorio
+      - ./mods:/factorio/mods:ro
+      - ./config/server3:/factorio/config
+    environment:
+      - PORT=34197  # Internal port stays the same
+      - RCON_PORT=27015  # Internal port stays the same
+      - SAVE_NAME=server3_autosave
+      - GENERATE_NEW_SAVE=true
+      - LOAD_LATEST_SAVE=true
+    restart: unless-stopped
+    networks:
+      - factorio-network
+    healthcheck:
+      test: ["CMD", "nc", "-u", "-z", "localhost", "34197"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring service to track all servers
+  factorio-monitor:
+    image: python:3.11-slim
+    container_name: factorio-monitor
+    volumes:
+      - ./scripts:/scripts
+      - ./logs:/logs
+    command: python3 /scripts/monitor.py
+    depends_on:
+      - factorio-server-1
+      - factorio-server-2
+      - factorio-server-3
+    networks:
+      - factorio-network
+    restart: unless-stopped
+
+networks:
+  factorio-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  server1_data:
+  server2_data:
+  server3_data:

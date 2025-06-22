@@ -13,10 +13,63 @@ from typing import Any, List, Optional
 
 
 class FactorioDevServer:
-    def __init__(self, factorio_path: str = "factorio") -> None:
-        self.factorio_path: str = factorio_path
+    def __init__(self, factorio_path: Optional[str] = None) -> None:
+        self.factorio_path: str = factorio_path or self._find_factorio_binary()
         self.process: Optional[subprocess.Popen[bytes]] = None
         self.save_path: Path = Path("saves/test.zip")
+
+    def _find_factorio_binary(self) -> str:
+        """Find Factorio binary in common installation locations"""
+        import platform
+        
+        # Check PATH first
+        try:
+            result = subprocess.run(["factorio", "--version"], 
+                                  capture_output=True, timeout=5)
+            if result.returncode == 0:
+                return "factorio"
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            pass
+        
+        # Platform-specific common locations
+        system = platform.system()
+        home = Path.home()
+        
+        candidates: List[Path] = []
+        
+        if system == "Darwin":  # macOS
+            candidates.extend([
+                home / "Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents/MacOS/factorio",
+                Path("/Applications/factorio.app/Contents/MacOS/factorio"),
+                home / "Applications/factorio.app/Contents/MacOS/factorio",
+            ])
+        elif system == "Linux":
+            candidates.extend([
+                home / ".steam/steam/steamapps/common/Factorio/bin/x64/factorio",
+                home / ".local/share/Steam/steamapps/common/Factorio/bin/x64/factorio",
+                Path("/opt/factorio/bin/x64/factorio"),
+                home / "factorio/bin/x64/factorio",
+            ])
+        elif system == "Windows":
+            candidates.extend([
+                Path("C:/Program Files (x86)/Steam/steamapps/common/Factorio/bin/x64/factorio.exe"),
+                Path("C:/Program Files/Steam/steamapps/common/Factorio/bin/x64/factorio.exe"),
+                home / "AppData/Local/Steam/steamapps/common/Factorio/bin/x64/factorio.exe",
+            ])
+        
+        # Test each candidate
+        for candidate in candidates:
+            if candidate.exists() and candidate.is_file():
+                try:
+                    result = subprocess.run([str(candidate), "--version"], 
+                                          capture_output=True, timeout=5)
+                    if result.returncode == 0:
+                        return str(candidate)
+                except (subprocess.TimeoutExpired, PermissionError):
+                    continue
+        
+        # Fallback to "factorio" if nothing found
+        return "factorio"
 
     def _check_factorio_binary(self) -> bool:
         """Check if Factorio binary is available"""
@@ -83,6 +136,8 @@ class FactorioDevServer:
             "admin",
             "--server-settings",
             "config/server-settings.json",
+            "--mod-directory",
+            "mods",
         ]
 
         # Redirect output to log file
@@ -108,11 +163,16 @@ class FactorioDevServer:
 
     def stop_server(self) -> None:
         """Stop the server"""
-        if self.process:
+        if self.process and self.process.poll() is None:
             print("Stopping server...")
-            os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
-            self.process.wait()
-            print("Server stopped")
+            try:
+                os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
+                self.process.wait()
+                print("Server stopped")
+            except ProcessLookupError:
+                print("Server already stopped")
+            finally:
+                self.process = None
 
     def test_connection(self) -> None:
         """Test RCON connection"""
@@ -136,8 +196,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Factorio development server")
     parser.add_argument(
         "--factorio-path",
-        default=os.environ.get("FACTORIO_PATH", "factorio"),
-        help="Path to Factorio binary",
+        default=os.environ.get("FACTORIO_PATH"),
+        help="Path to Factorio binary (auto-detected if not specified)",
     )
     parser.add_argument(
         "command", nargs="?", choices=["create", "test"], help="Command to run"
@@ -146,10 +206,12 @@ def main() -> None:
     args = parser.parse_args()
 
     # Setup signal handling
+    shutdown_requested = False
+    
     def signal_handler(sig: int, frame: Any) -> None:
+        nonlocal shutdown_requested
         print("\nShutting down...")
-        server.stop_server()
-        sys.exit(0)
+        shutdown_requested = True
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
@@ -177,8 +239,8 @@ def main() -> None:
         print("  python3 scripts/test_rcon.py  # Interactive mode")
 
         try:
-            while True:
-                time.sleep(1)
+            while not shutdown_requested:
+                time.sleep(0.1)
         except KeyboardInterrupt:
             pass
         finally:
