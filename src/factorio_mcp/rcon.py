@@ -35,6 +35,11 @@ class FactorioRCON:
         self._send_packet(2, command)  # SERVERDATA_EXECCOMMAND
         response = self._receive_packet()
         return response[3]  # Response body
+    
+    def send_agent_command(self, lua_function_call: str) -> str:
+        """Send an agent command via /silent-command and return the response."""
+        command = f"/silent-command {lua_function_call}"
+        return self.send_command(command)
 
     def close(self) -> None:
         """Close the connection."""

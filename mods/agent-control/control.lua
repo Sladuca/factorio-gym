@@ -1,7 +1,109 @@
 -- Agent Control System
 -- Handles RCON commands for external agent control
 
--- Helper function to send responses to either RCON or player
+-- Global functions for RCON access via /silent-command
+-- These return responses via rcon.print() which works correctly with RCON
+
+function agent_ensure_player(player_name)
+    if not player_name or player_name == "" then
+        rcon.print("ERROR: Usage: agent_ensure_player('player_name')")
+        return
+    end
+    
+    local player = game.players[player_name]
+    
+    if player then
+        rcon.print("Player already exists: " .. player_name)
+        return
+    end
+    
+    -- Create a new player
+    player = game.create_player(player_name)
+    if player and player.character then
+        -- Position the new player at spawn
+        player.character.teleport({0, 0})
+        rcon.print("Created player: " .. player_name)
+    else
+        rcon.print("Failed to create player: " .. player_name)
+    end
+end
+
+function agent_move(player_name, direction)
+    if not player_name or not direction then
+        rcon.print("ERROR: Usage: agent_move('player_name', direction)")
+        return
+    end
+    
+    local player = game.players[player_name]
+    
+    if not player then
+        rcon.print("Player not found: " .. player_name)
+        return
+    end
+    
+    if not player.character then
+        rcon.print("Player has no character: " .. player_name)
+        return
+    end
+    
+    -- Set walking state
+    player.character.walking_state = {walking = true, direction = direction}
+    rcon.print("Moving player " .. player_name .. " in direction " .. direction)
+end
+
+function agent_stop(player_name)
+    if not player_name then
+        rcon.print("ERROR: Usage: agent_stop('player_name')")
+        return
+    end
+    
+    local player = game.players[player_name]
+    
+    if not player then
+        rcon.print("Player not found: " .. player_name)
+        return
+    end
+    
+    if not player.character then
+        rcon.print("Player has no character: " .. player_name)
+        return
+    end
+    
+    -- Stop walking
+    player.character.walking_state = {walking = false}
+    rcon.print("Stopped player " .. player_name)
+end
+
+function agent_status(player_name)
+    if not player_name then
+        rcon.print("ERROR: Usage: agent_status('player_name')")
+        return
+    end
+    
+    local player = game.players[player_name]
+    
+    if not player then
+        rcon.print("Player not found: " .. player_name)
+        return
+    end
+    
+    if not player.character then
+        rcon.print("Player has no character: " .. player_name)
+        return
+    end
+    
+    local pos = player.character.position
+    local status = {
+        name = player.name,
+        position = {x = pos.x, y = pos.y},
+        walking = player.character.walking_state.walking,
+        direction = player.character.walking_state.direction
+    }
+    
+    rcon.print("STATUS:" .. serpent.line(status))
+end
+
+-- Helper function to send responses to either RCON or player (keeping for compatibility)
 local function send_response(command, message)
     if command.player_index then
         game.get_player(command.player_index).print(message)
@@ -135,6 +237,23 @@ end)
 -- Debug command to test RCON  
 commands.add_command("hello", "Test RCON response", function(command)
     send_response(command, "Hello from RCON!")
+end)
+
+-- Debug commands to test RCON response methods
+commands.add_command("test1", "Test rcon.print response", function(command)
+    rcon.print("Test1: This is from rcon.print")
+end)
+
+commands.add_command("test2", "Test game.print response", function(command)
+    game.print("Test2: This is from game.print")
+end)
+
+commands.add_command("test3", "Test command structure", function(command)
+    local info = "Test3: player_index=" .. tostring(command.player_index) .. 
+                ", name=" .. tostring(command.name) .. 
+                ", parameter=" .. tostring(command.parameter)
+    rcon.print(info)
+    game.print(info)  -- Also print to game for comparison
 end)
 
 -- Event handler for when the mod is loaded

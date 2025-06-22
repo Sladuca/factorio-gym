@@ -114,9 +114,9 @@ class FactorioRCON:
 def test_rcon_servers():
     """Test RCON connectivity to all servers."""
     servers = [
-        {'name': 'Server 1', 'host': 'localhost', 'port': 27015, 'password': 'factorio'},
-        {'name': 'Server 2', 'host': 'localhost', 'port': 27016, 'password': 'factorio'},
-        {'name': 'Server 3', 'host': 'localhost', 'port': 27017, 'password': 'factorio'},
+        {'name': 'Server 1', 'host': 'localhost', 'port': 28015, 'password': 'factorio'},
+        {'name': 'Server 2', 'host': 'localhost', 'port': 28016, 'password': 'factorio'},
+        {'name': 'Server 3', 'host': 'localhost', 'port': 28017, 'password': 'factorio'},
     ]
     
     print("Testing RCON connectivity to Factorio servers...\n")

@@ -1,7 +1,5 @@
 #!/bin/bash
-"""
-Setup script for Factorio Docker multi-instance environment
-"""
+# Setup script for Factorio Docker multi-instance environment
 
 set -e
 
@@ -16,22 +14,19 @@ mkdir -p mods
 
 # Set proper permissions for Factorio user (UID 845)
 echo "Setting proper permissions..."
-sudo chown -R 845:845 data/
-sudo chown -R 845:845 config/
-sudo chown -R 845:845 mods/
+# Note: On macOS, we'll let Docker handle the permissions
+# The setup will work without pre-setting permissions
 
 # Create RCON password files
 echo "Creating RCON password files..."
-echo "factorio" | sudo tee data/server1/config/rconpw > /dev/null
-echo "factorio" | sudo tee data/server2/config/rconpw > /dev/null
-echo "factorio" | sudo tee data/server3/config/rconpw > /dev/null
+mkdir -p data/server1/config data/server2/config data/server3/config
+echo "factorio" > data/server1/config/rconpw
+echo "factorio" > data/server2/config/rconpw
+echo "factorio" > data/server3/config/rconpw
 
-sudo chown 845:845 data/server*/config/rconpw
-sudo chmod 600 data/server*/config/rconpw
-
-# Build Docker image
-echo "Building Docker image..."
-docker build -t factorio-multi .
+# Pull Docker image
+echo "Pulling Factorio Docker image..."
+docker pull factoriotools/factorio:latest
 
 echo "Setup complete!"
 echo ""
