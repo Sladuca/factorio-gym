@@ -1,0 +1,41 @@
+   0.000 2025-06-21 19:32:30; Factorio 2.0.55 (build 83138, mac-arm64, steam, space-age)
+   0.005 Operating system: macOS 15.5.0
+   0.005 Program arguments: "/Users/seb/Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents/MacOS/factorio" "--start-server" "saves/test.zip" "--port" "34199" "--rcon-port" "34200" "--rcon-password" <private> "--server-settings" "config/server-settings.json" "--mod-directory" "mods" 
+   0.005 Config path: /Users/seb/Library/Application Support/factorio/config/config.ini
+   0.005 Read data path: /Users/seb/Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents/data
+   0.005 Write data path: /Users/seb/Library/Application Support/factorio [460821/948584MB]
+   0.005 Binaries path: /Users/seb/Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents
+   0.097 System info: [CPU: arm64, 12 cores, RAM: 18432 MB]
+   0.101 Running in headless mode
+   0.102 Audio is disabled
+   0.104 Info ModManager.cpp:444: FeatureFlag expansion-shaders = true
+   0.104 Info ModManager.cpp:444: FeatureFlag freezing = true
+   0.104 Info ModManager.cpp:444: FeatureFlag quality = true
+   0.104 Info ModManager.cpp:444: FeatureFlag rail-bridges = true
+   0.104 Info ModManager.cpp:444: FeatureFlag segmented-units = true
+   0.104 Info ModManager.cpp:444: FeatureFlag space-travel = true
+   0.104 Info ModManager.cpp:444: FeatureFlag spoiling = true
+   0.109 Loading mod core 0.0.0 (data.lua)
+   0.131 Loading mod base 2.0.55 (data.lua)
+   0.365 Loading mod agent-control 0.1.0 (data.lua)
+   0.385 Loading mod elevated-rails 2.0.55 (data.lua)
+   0.422 Loading mod quality 2.0.55 (data.lua)
+   0.446 Loading mod space-age 2.0.55 (data.lua)
+   0.823 Loading mod base 2.0.55 (data-updates.lua)
+   0.847 Loading mod quality 2.0.55 (data-updates.lua)
+   0.905 Loading mod space-age 2.0.55 (data-updates.lua)
+   1.019 Checksum for core: 1599024484
+   1.019 Checksum of base: 2095342242
+   1.019 Checksum of agent-control: 2338693539
+   1.019 Checksum of elevated-rails: 755107374
+   1.019 Checksum of quality: 3594706471
+   1.019 Checksum of space-age: 2561352795
+   1.498 Prototype list checksum: 611276394
+   1.587 Info PlayerData.cpp:66: Local player-data.json unavailable
+   1.587 Info PlayerData.cpp:71: Cloud player-data.json unavailable
+   1.592 Factorio initialised
+   1.595 Error CommandLineMultiplayer.cpp:355: Hosting multiplayer game failed: filesystem error: file_size(p): unknown error: No such file or directory ["config/server-settings.json"]
+   1.603 Info ServerMultiplayerManager.cpp:146: Quitting multiplayer connection.
+   1.603 Info ServerMultiplayerManager.cpp:808: updateTick(18446744073709551615) changing state from(Ready) to(Closed)
+   1.603 Info ServerMultiplayerManager.cpp:166: Deleting active scenario (global = true).
+   1.689 Goodbye

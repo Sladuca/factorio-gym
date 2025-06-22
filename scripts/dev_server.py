@@ -13,10 +13,14 @@ from typing import Any, List, Optional
 
 
 class FactorioDevServer:
-    def __init__(self, factorio_path: Optional[str] = None) -> None:
+    def __init__(self, factorio_path: Optional[str] = None, test_mode: bool = False) -> None:
         self.factorio_path: str = factorio_path or self._find_factorio_binary()
         self.process: Optional[subprocess.Popen[bytes]] = None
         self.save_path: Path = Path("saves/test.zip")
+        self.test_mode: bool = test_mode
+        # Use different ports for test mode to avoid conflicts
+        self.game_port: int = 34199 if test_mode else 34197
+        self.rcon_port: int = 34200 if test_mode else 34198
 
     def _find_factorio_binary(self) -> str:
         """Find Factorio binary in common installation locations"""
@@ -123,15 +127,18 @@ class FactorioDevServer:
             if not self.create_save():
                 return False
 
+        # Create logs directory
+        os.makedirs("logs", exist_ok=True)
+
         print("Starting Factorio server...")
         cmd: List[str] = [
             self.factorio_path,
             "--start-server",
             str(self.save_path),
             "--port",
-            "34197",
+            str(self.game_port),
             "--rcon-port",
-            "34198",
+            str(self.rcon_port),
             "--rcon-password",
             "admin",
             "--server-settings",
@@ -154,8 +161,8 @@ class FactorioDevServer:
 
         if self.process.poll() is None:
             print("Server started successfully!")
-            print("RCON available on localhost:34198 (password: admin)")
-            print("Game server on localhost:34197")
+            print(f"RCON available on localhost:{self.rcon_port} (password: admin)")
+            print(f"Game server on localhost:{self.game_port}")
             return True
         else:
             print("Server failed to start, check logs/server.log")

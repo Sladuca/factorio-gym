@@ -19,7 +19,7 @@ from dev_server import FactorioDevServer
 @pytest.fixture(scope="module")
 def test_server() -> Generator[FactorioDevServer, None, None]:
     """Start a test Factorio server for integration tests."""
-    server = FactorioDevServer()
+    server = FactorioDevServer(test_mode=True)
     
     # Check if Factorio is available
     if not server._check_factorio_binary():
@@ -41,7 +41,7 @@ def test_server() -> Generator[FactorioDevServer, None, None]:
 @pytest.fixture
 def rcon_client(test_server: FactorioDevServer) -> Generator[FactorioRCON, None, None]:
     """RCON client connected to test server."""
-    client = FactorioRCON("localhost", 34198, "admin")
+    client = FactorioRCON("localhost", test_server.rcon_port, "admin")
     client.connect()
     try:
         yield client

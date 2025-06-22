@@ -10,7 +10,7 @@ This project creates a system for programmatically controlling multiple Factorio
 
 ## Agent Directives
 
-Guidelines for AI agents (Claude, Amp, etc.) working on this project:
+AI agents (Claude, Amp, etc.) should follow these guidelines working on this project:
 
 ### Research & Validation
 - Use your tools. Search the web, think hard, think long
@@ -64,19 +64,6 @@ Following [Building an Agentic System](https://gerred.github.io/building-an-agen
 └─────────────────┘                    └─────────────────┘
 ```
 
-## Factorio Integration (Fact-Checked)
-
-### What Works
-- **Movement**: `player.character.walking_state = {walking=true, direction=0}`
-- **Mining**: `player.mine_entity(entity, force)`
-- **Teleportation**: `player.character.teleport({x, y})` (useful for training)
-- **Inventory**: `get_main_inventory().insert/remove()`
-- **Crafting**: `player.begin_crafting({recipe=..., count=...})`
-
-### What Doesn't Work (Critical Corrections)
-- ❌ `build_from_cursor()` - **REMOVED from API** (not MP-safe)
-- ❌ File reading in mods - Mods can **ONLY WRITE** to script-output
-- ❌ Direct file I/O communication - Must use **RCON protocol**
 
 ### Communication Architecture
 1. **External Agent → Factorio**: Direct RCON commands (5-20ms latency)
@@ -99,7 +86,6 @@ end
 - **Connection Scaling**: 2-3 agents per server with connection pooling
 - **Fault Isolation**: Agent failures don't cascade to other agents
 - **Easier Testing**: Direct command interface for comprehensive test coverage
-
 
 
 ## Key Files
