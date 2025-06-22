@@ -1,0 +1,7 @@
+saves
+config
+.ruff_cache
+.pytest_cache
+.mypy_cache
+test-data
+logs
